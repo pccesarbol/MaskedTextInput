@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2003-2006 Adobe Macromedia Software LLC and its licensors.
+// All Rights Reserved.
+// The following is Sample Code and is subject to all restrictions on such code
+// as contained in the End User License Agreement accompanying this product.
+// If you have received this file from a source other than Adobe,
+// then your use, modification, or distribution of it requires
+// the prior written permission of Adobe.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+
+	<mx:VBox width="100%" height="100%" xmlns:mx="http://www.adobe.com/2006/mxml" verticalScrollPolicy="off" xmlns:ns1="http://www.adobe.com/2006/fc" xmlns:ns2="com.adobe.flex.extras.controls.*" initialize="initData()">
+	<mx:Script source="as/formelements.as"/>
+	<mx:HBox width="100%" height="100%">
+		<mx:VBox height="100%" width="100%" verticalGap="30" paddingLeft="100" backgroundColor="#abcdef" >
+			<head:GlassHeaders xmlns:head="*" headerTitle="Properties and Styles"/>
+			
+			<mx:HBox backgroundColor="#FF00FF">
+				<mx:Image source="@Embed('assets/alert.png')"/>
+				<mx:Label text="Directions" fontWeight="bold"/>
+				<mx:Text text="The attributes given below can be modified and will be reflected by the MaskedTextInput in the right panel. Roll over the mouse on the icons to the left for information about the attributes" width="400"/>
+			</mx:HBox>
+			
+			<mx:VBox paddingBottom="20" paddingTop="20" paddingLeft="20" paddingRight="20">
+				<mx:HBox>
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Mask Characters allowed are #(digit), A(A-Z), a(a-z), B(A-Z,a-z), .(any character), *(any letter or digit), /(escape character), DD/MM/YYYY or MM/DD/YYYY or YYYY/MM/DD or YYYY/DD/MM (date formats)"/>
+					<mx:Label text="Input Mask"/>
+					<mx:TextInput id="inputMask" text=".........." fontWeight="bold" fontSize="12"/>
+				</mx:HBox>
+				
+				<mx:HBox>
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="This character is substituted for the blank space when the text is retrieved from the control using the fullText property"/>
+					<mx:Label text="Default Character"/>
+					<mx:TextInput id="defaultChar" text="-" fontWeight="bold" fontSize="12"/>
+				</mx:HBox>
+				
+				<mx:HBox>
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="If true, the color of the text in the control will change to errorTextColor if the field is left incomplete"/>					
+					<mx:Label text="Required"/>
+					<mx:CheckBox id="req" selected="false" click="updateClr()"/>
+				</mx:HBox>
+				
+				<mx:HBox>
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="If true, focus is passed to the next field according to the tab-index, when the last character of the mask is entered. "/>					
+					<mx:Label text="AutoAdvance"/>
+					<mx:CheckBox id="adv" selected="false"/>
+				</mx:HBox>
+								
+				<mx:HBox>
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Default is red if 'required' is set to true, light blue otherwise"/>
+					<mx:Label text="Cell Color"/>
+					<mx:ColorPicker id="clr" close="changeClr()"/>
+				</mx:HBox>
+			
+				<mx:HBox>
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Default is red"/>
+					<mx:Label text="ErrorText Color"/>
+					<mx:ColorPicker id="err" close="changeErr()" />
+				</mx:HBox>
+			
+				<mx:HBox>
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="The string that can be entered by the user. Press ENTER to replace the 'text' property with the string entered here"/>
+					<mx:Label text="Text"/>
+					<mx:TextInput id="text" keyUp="if(event.keyCode==Keyboard.ENTER) {myMTI.text=text.text;}"/>
+					<mx:Button label="Click here to update the fullText property" click="full.text=myMTI.fullText"/>
+				</mx:HBox>	
+			</mx:VBox>
+						
+			<mx:HBox paddingLeft="20">
+				<mx:Image source="@Embed('assets/info.gif')" toolTip="This is the combination of 'text' and masked characters"/>
+				<mx:Text text="Full Text (Read only)" fontWeight="bold" fontStyle="italic" width="75" color="#FF0000"/>
+				<mx:TextInput id="full" editable="false" />
+			</mx:HBox>
+					
+			<mx:Box width="100%" paddingRight="5" paddingBottom="5" horizontalAlign="right">
+				<mx:LinkButton label="Restore Defaults" click="restoreMTIDefaults()" styleName="undoLink" />
+			</mx:Box>	
+		</mx:VBox>			
+
+<!-- Sandbox -->
+		<mx:VBox height="100%" width="100%"  verticalGap="10" paddingLeft="100" backgroundColor="#fedcba" >
+			<head:GlassHeaders xmlns:head="*" headerTitle="SANDBOX"/>
+			<ns2:MaskedTextInput id="myMTI" inputMask="{inputMask.text}" defaultCharacter="{defaultChar.text}"
+			 required="{req.selected}" autoAdvance="{adv.selected}" width="100%"
+			 keyUp="updateText()" inputMaskEnd="updateText()"/>
+			
+			<mx:HBox> 
+				<ns2:MaskedTextInput id="dummy" inputMask="dummy##" visible="{adv.selected}" />
+				<mx:Image source="@Embed('assets/info.gif')" toolTip="This is just to illustrate the autoAdvance property." visible="{adv.selected}"/>
+			</mx:HBox>
+		</mx:VBox>
+	</mx:HBox>
+</mx:VBox>

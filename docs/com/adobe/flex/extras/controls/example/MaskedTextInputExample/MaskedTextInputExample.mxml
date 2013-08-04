@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2003-2006 Adobe Macromedia Software LLC and its licensors.
+// All Rights Reserved.
+// The following is Sample Code and is subject to all restrictions on such code
+// as contained in the End User License Agreement accompanying this product.
+// If you have received this file from a source other than Adobe,
+// then your use, modification, or distribution of it requires
+// the prior written permission of Adobe.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:fc="http://www.adobe.com/2006/fc">
+	<mx:Script source="as/validation.as"/>
+	<mx:Style>
+		MaskedTextInput {
+			font-family: "Courier New";
+			font-size: 16;
+		}
+	</mx:Style>
+   
+	<mx:StringValidator source="{polNum}" valid="handleValid(event)" property="text" minLength="5" maxLength="5" triggerEvent="focusOut"/>
+    <mx:DateValidator source="{dob}" valid="handleValid(event)" property="fullText" triggerEvent="focusOut"/>
+    <mx:SocialSecurityValidator source="{ssn}" valid="handleValid(event)" property="text" triggerEvent="focusOut"/>
+        
+	<mx:VBox>
+		<mx:HBox>
+		    <mx:Panel title="Masked Text Input Example" height="50%" width="50%" 
+				paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
+
+				<mx:Form width="100%" height="100%">
+					<mx:FormHeading label="Enter values into the form."/>
+					
+					<mx:FormItem label="Policy Number(IN-123-AB)">
+						<fc:MaskedTextInput id="polNum" inputMask="IN-###-BB" required="true"
+							 autoAdvance="true" invalid="handleInValid(event)" defaultCharacter=" " toolTip="IN-123-AB" 
+							 change="valids.polNum = false;" width="200"/>
+					</mx:FormItem>
+
+					<mx:FormItem label="Date of birth " direction="horizontal">
+						<fc:MaskedTextInput id="dob" inputMask="MM/DD/YYYY" autoAdvance="true" 
+							invalid="handleInValid(event)" change="valids.dob = false;" width="200"/>
+						<mx:Image id="errDOB" width="25" height="25" source="@Embed('assets/error.JPG')" visible="false" 
+							toolTip="Enter Valid Date"/>
+					</mx:FormItem>
+
+					<mx:FormItem label="SSN" direction="horizontal">
+						<fc:MaskedTextInput id="ssn" inputMask="###-##-####" 
+							required="true" invalid="handleInValid(event)" change="valids.ssn = false;" width="200"/>
+						<mx:Image id="errSSN" width="25" height="25" source="@Embed('assets/error.JPG')" visible="false" 
+							toolTip="Enter Valid SSN"/>
+					</mx:FormItem>
+
+					<mx:FormItem>
+						<mx:Button id="submit" label="Submit" enabled="false" click="print()"/>
+					</mx:FormItem>
+				</mx:Form>
+
+			</mx:Panel>
+
+			<mx:Panel title="User Details" id="detailsPanel" visible="false" height="75%" width="400"
+        		paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
+		       <mx:Label width="100%" color="blue" id="userDetails"
+        		    text="User Details are shown."/>
+			        <mx:Grid width="100%">
+            			<mx:GridRow>
+            			    <mx:GridItem>
+			                    <mx:Label id="policy" />
+            			    </mx:GridItem>
+			            </mx:GridRow>
+			            <mx:GridRow>
+            			    <mx:GridItem>
+			                    <mx:Label id="dt" />
+            			    </mx:GridItem>
+			            </mx:GridRow>
+                        <mx:GridRow>
+            			    <mx:GridItem>
+			                    <mx:Label id="ssno" />
+            			    </mx:GridItem>
+			            </mx:GridRow>
+            	        <mx:GridRow>
+            			    <mx:GridItem>
+			                    <mx:CheckBox id="showFullText" label="Show Full Text" click="print()"/>
+            			    </mx:GridItem>
+			            </mx:GridRow>
+                    </mx:Grid>
+		    </mx:Panel>
+	    </mx:HBox>
+    </mx:VBox>
+</mx:Application>

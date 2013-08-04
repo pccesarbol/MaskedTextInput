@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2003-2006 Adobe Macromedia Software LLC and its licensors.
+// All Rights Reserved.
+// The following is Sample Code and is subject to all restrictions on such code
+// as contained in the End User License Agreement accompanying this product.
+// If you have received this file from a source other than Adobe,
+// then your use, modification, or distribution of it requires
+// the prior written permission of Adobe.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:fc="com.adobe.flex.extras.controls.*" >
+<mx:Script>
+	<![CDATA[
+		import mx.core.UIComponent;
+		import mx.events.CalendarLayoutChangeEvent;
+		import mx.managers.PopUpManager;
+		import mx.controls.Button;		
+		import mx.controls.DateChooser;
+		
+		private var dc:DateChooser;
+		private static var comp:UIComponent;
+		
+		private function changeColor():void{
+			var childIndex:int;
+			var i:int;
+			childIndex=linkBar.selectedIndex;
+			for(i=0;i<=childIndex;i++){
+				Button(linkBar.getChildAt(i)).setStyle('fillColors',[0x0000FF,0xAAAAAA]);					
+			}
+			for(i=2;i>=childIndex+1;i--){
+				Button(linkBar.getChildAt(i)).setStyle('fillColors',[0xFFFFFF,0xCCCCCC]);
+			}					
+		}
+		
+		private function showData():void{
+			show.text="Thanks for the request. Your request is being processed";
+			p1.visible=false;
+			p2.visible=true;
+		}
+		
+		public function openWindow(event:MouseEvent):void {
+        	dc = new DateChooser();
+        	comp=UIComponent(event.currentTarget);
+	        dc.addEventListener(Event.CHANGE, closeWindow);
+    	    PopUpManager.addPopUp(dc, this, true);
+        	PopUpManager.centerPopUp(dc);
+    	}
+
+		private function closeWindow(event:CalendarLayoutChangeEvent):void{
+			if(comp.name=='img1')
+				date1.text=df.format(dc.selectedDate);
+			else
+				date2.text=df.format(dc.selectedDate);
+			PopUpManager.removePopUp(dc);
+		}
+	]]>
+</mx:Script>
+
+<mx:DateFormatter id="df" formatString="DD/MM/YYYY"/>
+
+<mx:PhoneNumberValidator source="{phone1}" property="text" 
+        trigger="{phone1}" triggerEvent="focusOut" required="false"
+        invalid="errPh1.visible=true" valid="errPh1.visible=false"/>
+      
+<mx:PhoneNumberValidator source="{phone2}" property="text" 
+        trigger="{phone2}" triggerEvent="focusOut" required="false"
+        invalid="errPh2.visible=true" valid="errPh2.visible=false"/>
+        
+        
+<mx:Panel id="p1" width="100%" height="100%" label="Reservation Request" paddingLeft="10" paddingTop="10">
+	<mx:Label text="Travel reservation request form" fontStyle="italic" fontWeight="bold"/>
+
+	<mx:HBox width="100%" id="links" paddingTop="10" paddingLeft="10">
+		<mx:ButtonBar id="linkBar" dataProvider="{myViewStack}" itemClick="changeColor()" childAdd="Button(linkBar.getChildAt(0)).setStyle('fillColors',[0x0000FF,0xAAAAAA])"/>
+	</mx:HBox>
+
+	<mx:ViewStack id="myViewStack" width="70%" height="70%" paddingLeft="10">
+		<mx:VBox label="User details" width="70%" height="70%" backgroundColor="#abcdef" verticalGap="20">
+			<mx:Form width="100%" height="100%" verticalGap="20">
+				<mx:FormItem label="First Name" width="100%" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only alphabet"/>
+					<fc:MaskedTextInput inputMask="BBBBBBBBBBBBBBB"/>
+				</mx:FormItem>
+				<mx:FormItem label="Last Name" width="100%" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only alplabet"/>
+					<fc:MaskedTextInput inputMask="BBBBBBBBBBBBBBB"/>
+				</mx:FormItem>
+				<mx:FormItem label="Address" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" visible="false"/>
+					<mx:TextInput id="address"/>
+				</mx:FormItem>
+				<mx:FormItem label="City" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only alphabet"/>
+					<fc:MaskedTextInput id="city" inputMask="BBBBBBBBBBBBBBB"/>	
+				</mx:FormItem>
+				<mx:FormItem label="Zip Code" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only digits"/>
+					<fc:MaskedTextInput id="zip" inputMask="#########" autoAdvance="true"/>	
+				</mx:FormItem>
+        		<mx:FormItem label="Contact Number" direction="horizontal">
+        			<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only digits. Cells cannot be left incomplete"/>
+              		<fc:MaskedTextInput id="phone1" inputMask="(###)###-####" required="true" autoAdvance="true" defaultCharacter=""/>
+              		<mx:Image id="errPh1" source="@Embed('assets/help.jpg')" visible="false" toolTip="Enter complete contact number"/>
+        	    </mx:FormItem>
+            	<mx:FormItem label="Mobile Number" direction="horizontal">
+            		<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts ony digits. Cells cannot be left incomplete"/>
+           			<fc:MaskedTextInput id="phone2" inputMask="##########"  required="true" autoAdvance="true" defaultCharacter=""/>
+           			<mx:Image id="errPh2" source="@Embed('assets/help.jpg')" visible="false" toolTip="Enter complete mobile number"/>
+				</mx:FormItem>
+				<mx:FormItem label="Email id" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" visible="false"/>
+					<mx:TextInput id="email" />
+				</mx:FormItem>
+    	     </mx:Form>
+
+			<mx:HBox horizontalAlign="right" paddingBottom="30" paddingRight="30" width="100%">
+				<mx:Button label="Continue" click="myViewStack.selectedIndex=1;Button(linkBar.getChildAt(1)).setStyle('fillColors',[0x0000FF,0xAAAAAA])"/>
+			</mx:HBox>
+		</mx:VBox>
+
+		<mx:VBox label="Journey Details" width="60%" height="60%" backgroundColor="#abcdef" verticalGap="20">
+			<mx:Form width="100%" height="100%" verticalGap="20">
+				<mx:FormItem label="Journey Type">
+					<mx:VBox width="100%" height="100%">
+						<mx:RadioButtonGroup id="jType"/>
+						<mx:RadioButton id="one" label="one-way" groupName="jType" selected="true"/>
+						<mx:RadioButton id="two" label="two-way" groupName="jType"/>
+					</mx:VBox>
+				</mx:FormItem>
+				<mx:FormItem label="From" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only alphabet"/>
+					<fc:MaskedTextInput id="init" inputMask="BBBBBBBBBBBBBBB" required="false"/>
+				</mx:FormItem>
+				<mx:FormItem label="To" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only alphabet"/>
+					<fc:MaskedTextInput id="dest" inputMask="BBBBBBBBBBBBBBB" required="false"/>
+				</mx:FormItem>
+				<mx:FormItem label="Date" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only numbers. Date can also be chosen by clicking on the icon to the right of this control"/>
+					<fc:MaskedTextInput id="date1" inputMask="DD/MM/YYYY"/>
+					<mx:Image id="img1" source="@Embed('assets/cal.png')" click="openWindow(event)"/>
+				</mx:FormItem>
+				<mx:FormItem label="Return Date" visible="{two.selected}" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only numbers. Date can also be chosen by clicking on the icon to the right of this control"/>
+					<fc:MaskedTextInput id="date2" inputMask="DD/MM/YYYY"/>
+					<mx:Image id="img2" source="@Embed('assets/cal.png')" click="openWindow(event)"/>
+				</mx:FormItem>
+			</mx:Form>
+
+			<mx:HBox horizontalAlign="right" paddingBottom="30" paddingRight="30" width="100%">
+				<mx:Button label="Back" click="myViewStack.selectedIndex=0;Button(linkBar.getChildAt(1)).setStyle('fillColors',[0xFFFFFF,0xCCCCCC]);"/>
+				<mx:Button label="Continue" click="myViewStack.selectedIndex=2;Button(linkBar.getChildAt(2)).setStyle('fillColors',[0x0000FF,0xAAAAAA])"/>
+			</mx:HBox>
+		</mx:VBox>
+
+		<mx:VBox label="Payment Details" width="50%" height="50%" backgroundColor="#abcdef" verticalGap="20">
+			<mx:Form width="100%" height="100%" verticalGap="20">
+				<mx:FormItem label="Card Type" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" visible="false"/>
+                	<mx:ComboBox id="cardType">
+   	                	<mx:dataProvider>
+       	                	<mx:Object label="American Express" data="American Express"/>
+	           	            <mx:Object label="Diners Club" data="Diners Club"/>
+    	           	        <mx:Object label="Discover" data="Discover"/>
+        	           	    <mx:Object label="MasterCard" data="MasterCard"/>
+            	           	<mx:Object label="Visa" data="Visa"/>
+                	    </mx:dataProvider>
+	   	            </mx:ComboBox>
+    	   	    </mx:FormItem>
+        	   	<mx:FormItem label="CreditCard Number" direction="horizontal" width="100%" height="100%">
+        	   		<mx:Image source="@Embed('assets/info.gif')" toolTip="Accepts only numbers"/>
+            	   	<fc:MaskedTextInput id="cardNumber" inputMask="####-####-####-####" required="false"/>
+	            </mx:FormItem>
+			</mx:Form>
+
+			<mx:HBox horizontalAlign="right" paddingBottom="50" paddingRight="30" width="100%">
+				<mx:Button label="Back" click="myViewStack.selectedIndex=1;Button(linkBar.getChildAt(2)).setStyle('fillColors',[0xFFFFFF,0xCCCCCC]);"/>
+				<mx:Button label="Submit" click="showData()"/>
+			</mx:HBox>
+		</mx:VBox>
+	</mx:ViewStack>
+</mx:Panel>
+
+<mx:Panel id="p2" width="50%" height="50%" visible="false" paddingLeft="50" paddingTop="50" backgroundColor="#fedcba">
+	<mx:Label id="show" fontWeight="bold" fontSize="20" fontFamily="Sans Serif"/>
+	<mx:HBox horizontalAlign="center" paddingTop="50" paddingRight="30" width="100%">
+		<mx:Button label="Back" click="p1.visible=true;p2.visible=false"/>
+	</mx:HBox>	
+</mx:Panel>
+</mx:Application>

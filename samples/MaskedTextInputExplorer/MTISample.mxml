@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:fc="com.adobe.flex.extras.controls.*" width="100%" height="100%">
+	<mx:Script>
+        import mx.controls.Alert;
+        [Bindable]
+        private var error1:Boolean=true;
+        [Bindable]
+        private var error2:Boolean=true;
+        [Bindable]
+        private var error3:Boolean=true;
+        [Bindable]
+        private var error4:Boolean=true;
+        [Bindable]
+        private var error5:Boolean=true;
+        [Bindable]
+        private var error6:Boolean=true;
+        [Bindable]
+        private var error7:Boolean=true;
+        [Bindable]
+        private var error8:Boolean=true;
+        [Bindable]
+        private var error9:Boolean=true;
+      
+      	private function validateFields():void{
+      		if(error1 || error2 || error3 || error4 || error5 || error6 || error7 || error8 || error9)
+      			myButton.enabled=false;
+      		else
+      			myButton.enabled=true;	
+      	}
+      	
+        private function showData():void{
+        	
+        	fname.text="First Name: "+firstName.text;
+        	mname.text="Middle  Name: "+middleName.text;
+        	lname.text="Last Name: "+lastName.text;
+        	social.text="Social Security Number: "+ssn.text;
+        	ag.text="Age: "+age.text;
+        	zc.text="Zip Code: "+zip.text;
+        	cty.text="City: "+city.text;
+        	cnum.text="Contact Number: "+phone1.fullText;
+        	mnum.text="Mobile Number: "+phone2.fullText;
+        	em.text="Email: "+email.text;
+        	dt.text="Date: "+date.text;
+        	cct.text="Credit Card Type: "+cardTypeCombo.selectedLabel;
+        	ccn.text="Credit Card Number: "+cardNumberInput.text;
+        	mon.text="Amount Paid: "+amt.fullText;
+        	
+        	details.visible=true;
+        }
+    </mx:Script>
+    
+    <mx:PhoneNumberValidator source="{phone1}" property="text" 
+        triggerEvent="focusOut" valid="error1=false;" invalid="error1=true"/>
+        
+    <mx:PhoneNumberValidator source="{phone2}" property="text" 
+        trigger="{phone2}" triggerEvent="focusOut" required="false"
+        invalid="errPh.visible=true;error9=true" valid="errPh.visible=false;error9=false"/>
+      
+    <mx:SocialSecurityValidator source="{ssn}" property="text" 
+   		triggerEvent="focusOut" valid="error2=false" invalid="error2=true"/>
+        
+    <mx:ZipCodeValidator source="{zip}" property="text"	triggerEvent="focusOut"
+    	domain="US or Canada" valid="error3=false" invalid="error3=true"/>
+        
+    <mx:DateValidator source="{date}" property="fullText" triggerEvent="focusOut" 
+    	inputFormat="{dateType.selectedValue.toString()}" valid="error4=false" invalid="error4=true"/>
+     
+    <mx:CreditCardValidator cardNumberSource="{cardNumberInput}" cardNumberProperty="text" 
+       	cardTypeSource="{cardTypeCombo}" cardTypeProperty="selectedLabel" trigger="{cardNumberInput}"
+        triggerEvent="focusOut" valid="error5=false" invalid="error5=true"/>
+        
+    <mx:NumberValidator source="{age}" property="text" minValue="18" maxValue="100"
+    	triggerEvent="focusOut" precision="0" valid="error6=false" invalid="error6=true"/>
+    	
+    <mx:StringValidator source="{firstName}" property="text" triggerEvent="focusOut" valid="error7=false"
+    	invalid="error7=true"/>
+    
+    <mx:StringValidator source="{lastName}" property="text" triggerEvent="focusOut" valid="error8=false" 
+    	invalid="error8=true"/>
+    
+    <mx:Label text="Enter the membership details" fontWeight="bold"/>
+    
+    <mx:HBox width="100%" height="80%">
+    <mx:VBox width="100%" height="100%">
+    	<mx:Accordion id="acc" label="Enter the membership details" width="70%" height="100%" backgroundColor="#fedcba"
+    		 change="if(acc.selectedChild==v3) {acc.selectedChild=v2;}"
+    		 focusOut="validateFields()">
+    	
+			<mx:VBox id="v1" label="Personal Details" width="100%" height="100%" backgroundColor="#abcdef">
+	
+			<mx:Form width="100%" height="100%">
+				<mx:FormItem label="First Name *" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Mandatory and so uses StringValidator"/>
+					<fc:MaskedTextInput id="firstName" inputMask="BBBBBBBBBBBBBBB" change="error7=true"/>
+				</mx:FormItem>
+				<mx:FormItem label="Middle Name" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Not mandatory"/>
+					<fc:MaskedTextInput id="middleName" inputMask="BBBBBBBBBBBBBBB"/>
+				</mx:FormItem>
+				<mx:FormItem label="Last Name *" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Mandatory and so uses StringValidator"/>
+					<fc:MaskedTextInput id="lastName" inputMask="BBBBBBBBBBBBBBB" change="error8=true"/>
+				</mx:FormItem>
+				<mx:FormItem label="Social Security Number * " direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Mandatory and uses SocialSecurityValidator. Cells cannot be left incomplete"/>
+    	            <fc:MaskedTextInput id="ssn" width="100%" inputMask="###-##-####" change="error2=true;" required="true" autoAdvance="true"/>
+	            </mx:FormItem>
+	            <mx:FormItem label="Age *" direction="horizontal">
+	            	<mx:Image source="@Embed('assets/info.gif')" toolTip="Allows only numbers between 18 and 100 and so uses NumberValidator."/>
+					<fc:MaskedTextInput id="age" inputMask="###" change="error6=true;"/>
+				</mx:FormItem>
+			</mx:Form>
+			<mx:HBox horizontalAlign="right" width="100%" paddingBottom="5" paddingRight="5">
+				<mx:Button id="next1" click="acc.selectedChild=v2" label="Next"/>
+			</mx:HBox>
+			</mx:VBox>
+			<mx:VBox id="v2" label="Contact Details" width="100%" height="100%"  backgroundColor="#abcdef" visible="false">
+			<mx:Form width="100%" height="100%">
+				<mx:FormItem label="Address" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" visible="false"/>
+					<mx:TextInput id="address"/>
+				</mx:FormItem>
+				<mx:FormItem label="City" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" visible="false"/>
+					<fc:MaskedTextInput id="city" inputMask="BBBBBBBBBBBBBBB"/>	
+				</mx:FormItem>
+				<mx:FormItem label="Zip Code *" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" toolTip="Mandatory and uses ZipCodeValidator"/>
+					<fc:MaskedTextInput id="zip" inputMask="#########" change="error3=true;" autoAdvance="true"/>	
+				</mx:FormItem>
+        		<mx:FormItem label="Contact Number *" direction="horizontal">
+        			<mx:Image source="@Embed('assets/info.gif')" toolTip="Mandatory and uses PhoneNumberValidator. Cells cannot be left incomplete"/>
+              		<fc:MaskedTextInput id="phone1" inputMask="(###)###-####" change="error1=true;" required="true" autoAdvance="true" defaultCharacter=""/>
+        	    </mx:FormItem>
+            	<mx:FormItem label="Mobile Number" direction="horizontal">
+            		<mx:Image source="@Embed('assets/info.gif')" toolTip="Mandatory and uses PhoneNumberValidator. Cells cannot be left incomplete"/>
+           			<fc:MaskedTextInput id="phone2" inputMask="##########" change="error9=true" required="true" autoAdvance="true" defaultCharacter=""/>
+           			<mx:Image id="errPh" source="@Embed('assets/help.jpg')" visible="false" toolTip="Enter complete mobile number"/>
+				</mx:FormItem>
+				<mx:FormItem label="Email id" direction="horizontal">
+					<mx:Image source="@Embed('assets/info.gif')" visible="false"/>
+					<mx:TextInput id="email"/>
+				</mx:FormItem>
+    	     </mx:Form>
+    	     <mx:HBox horizontalAlign="right" width="100%" paddingBottom="5" paddingRight="5">
+				<mx:Button id="back1" click="acc.selectedChild=v1" label="Back"/>
+				<mx:Button id="next2" click="acc.selectedChild=v3" label="Next"/>
+			</mx:HBox>
+    		</mx:VBox>
+    		<mx:VBox id="v3" label="Membership Details" width="100%" height="100%" backgroundColor="#abcdef">
+    		<mx:Form width="100%" height="100%">
+    			<mx:FormItem label="Date Format" direction="horizontal">
+    				<mx:Image source="@Embed('assets/info.gif')" toolTip="Format in which the dates will be validated"/>
+    				<mx:VBox width="100%" height="100%">
+						<mx:RadioButtonGroup id="dateType" itemClick="date.inputMask=dateType.selectedValue.toString()"/>
+						<mx:RadioButton id="USDate" label="MM/DD/YYYY" groupName="dateType" value="MM/DD/YYYY" selected="true"/>
+						<mx:RadioButton id="euroDate" label="DD/MM/YYYY" groupName="dateType" value="DD/MM/YYYY"/>
+						<mx:RadioButton id="revUSDate" label="YYYY/MM/DD" groupName="dateType" value="YYYY/MM/DD"/>
+						<mx:RadioButton id="revEuroDate" label="YYYY/DD/MM" groupName="dateType" value="YYYY/DD/MM"/>
+					</mx:VBox>
+    			</mx:FormItem>
+    			<mx:FormItem label="Date of Joining *" direction="horizontal">
+    				<mx:Image source="@Embed('assets/info.gif')" toolTip="Mandatory and uses DateValidator. Cells cannot be left incomplete"/>
+    				<fc:MaskedTextInput id="date" inputMask="MM/DD/YYYY" change="error4=true;" required="true"/>
+    			</mx:FormItem>
+    			<mx:FormItem label="Card Type" direction="horizontal">
+    				<mx:Image source="@Embed('assets/info.gif')" visible="false"/>
+	                <mx:ComboBox id="cardTypeCombo" change="error5=true">
+    	                <mx:dataProvider>
+        	                <mx:Object label="American Express" data="American Express"/>
+            	            <mx:Object label="Diners Club" data="Diners Club"/>
+                	        <mx:Object label="Discover" data="Discover"/>
+                    	    <mx:Object label="MasterCard" data="MasterCard"/>
+                        	<mx:Object label="Visa" data="Visa"/>
+	                    </mx:dataProvider>
+    	            </mx:ComboBox>
+        	    </mx:FormItem>
+            	<mx:FormItem label="CreditCard Number *" direction="horizontal" width="100%" height="100%">
+            		<mx:Image source="@Embed('assets/info.gif')" toolTip="Mandatory and uses CreditCardValidator."/>
+                	<fc:MaskedTextInput id="cardNumberInput" inputMask="####-####-####-####" required="false" change="error5=true;"/>
+	            </mx:FormItem>
+	            <mx:FormItem label="Currency in" direction="horizontal" width="100%" height="100%">
+	            	<mx:Image source="@Embed('assets/info.gif')" visible="false"/>
+	                <mx:ComboBox id="curCombo" change="amt.inputMask=curCombo.selectedItem.data+'#####/.##'">
+    	                <mx:dataProvider>
+        	                <mx:Object label="Indian Rupees" data="Rs/."/>
+            	            <mx:Object label="US Dollars" data="$"/>
+	                    </mx:dataProvider>
+    	            </mx:ComboBox>
+	            </mx:FormItem>
+	            <mx:FormItem label="Amount" direction="horizontal" width="100%" height="100%">
+	            	<mx:Image source="@Embed('assets/info.gif')" toolTip="Mandatory and uses CreditCardValidator."/>
+                	<fc:MaskedTextInput id="amt" inputMask="Rs/.#####/.##" required="false" defaultCharacter=""/>
+	            </mx:FormItem>
+    		</mx:Form>
+    		<mx:HBox horizontalAlign="right" width="100%" paddingBottom="5" paddingRight="5">
+    			<mx:Button id="back2" label="Back" click="acc.selectedChild=v2"/>
+				
+			</mx:HBox>
+			</mx:VBox>
+		</mx:Accordion>
+		<mx:HBox width="70%" paddingRight="50" horizontalAlign="right">
+			<mx:Button id="myButton" label="Submit" click="showData()" enabled="false" disabledColor="#abcdef"/>	
+		</mx:HBox>
+		
+		
+    </mx:VBox>
+       	
+		<mx:VBox>
+			<mx:VBox backgroundColor="#FFFF00" width="30%" height="50%">
+			<mx:Label text="Quick Instructions:" fontWeight="bold"/>
+			<mx:Text text="For detailed instructions, roll the mouse over the icon to the left of the fields"/>
+			<mx:Text text="1. Fields marked as * are mandatory"/>
+			<mx:Text text="2. Fields with cells in light pink color, if being filled, should be filled completely"/>
+			<mx:Text text="3. Age should be in between 18 and 100"/>
+			<mx:Text text="4. First name, middle name, last name and city accept only alphabets"/>
+			<mx:Text text="5. Social Security Number, age, zip code, phone numbers, date, credit card number and amount accept only digits"/>
+			<mx:Text text="6. 'Submit' is enabled only if all the fields are valid" fontWeight="bold"/>
+		</mx:VBox>
+	
+		<mx:VBox id="details" visible="false" backgroundColor="#FFFFFF">
+			<mx:Label width="100%" color="blue" id="userDetails" text="Details submitted are" fontWeight="bold"/>
+
+        <mx:Grid width="100%">
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="fname"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="mname"/>
+                </mx:GridItem>
+            </mx:GridRow>
+
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="lname"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="social"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="ag" />
+                </mx:GridItem>
+            </mx:GridRow>
+            
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label text="Address: {address.text}" />
+                </mx:GridItem>
+            </mx:GridRow>
+            
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="cty" />
+                </mx:GridItem>
+            </mx:GridRow>
+            
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="zc"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="cnum"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="mnum"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="em"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="dt"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="cct"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            
+            <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="ccn"/>
+                </mx:GridItem>
+            </mx:GridRow>
+             
+             <mx:GridRow>
+                <mx:GridItem>
+                    <mx:Label id="mon"/>
+                </mx:GridItem>
+            </mx:GridRow>
+        </mx:Grid>
+
+		</mx:VBox>
+		</mx:VBox>
+		
+    </mx:HBox>
+	
+</mx:Box>
